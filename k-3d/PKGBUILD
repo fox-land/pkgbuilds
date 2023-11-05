@@ -1,0 +1,33 @@
+# Maintainer: Edwin <edwin@kofler.dev>
+pkgname=k-3d
+_pkgname2=k3d
+pkgver=0.8.0.6
+pkgrel=1
+pkgdesc="K-3D is free-as-in-freedom 3D modeling and animation software"
+arch=('x86_64')
+url="https://github.com/K-3D/k3d"
+license=('MIT')
+depends=(
+  'git'
+  'cmake'
+  'boost'
+  'gtkglext'
+  'doxygen'
+)
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/K-3D/k3d/archive/v${pkgver}.tar.gz")
+sha256sums=('c884667715c13543354d1e3e8edca9557a20d5ad3aa6bc35762394916655e817')
+
+build() {
+  cd "$srcdir/$_pkgname2-k3d-$pkgver"
+
+  mkdir k3d-build
+  cd k3d-build
+  cmake ../
+  make
+}
+
+package() {
+  cd "$srcdir/$_pkgname2-k3d-$pkgver"
+
+  make install
+}

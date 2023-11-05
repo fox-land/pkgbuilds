@@ -1,0 +1,32 @@
+# Maintainer: Edwin <edwin@kofler.dev>
+pkgname=pass-extension-tail
+pkgver=1.2.0
+pkgrel=1
+pkgdesc="A pass extension to avoid printing the password to the console"
+arch=('any')
+url="https://github.com/palortoff/pass-extension-tail"
+license=('GPL3')
+depends=(
+  'pass'
+  'git'
+  'make'
+)
+source=("${pkgname}-${pkgver}.tar.gz::https://github.com/palortoff/pass-extension-tail/archive/v${pkgver}.tar.gz")
+sha256sums=('3cb6492347e406b773a5feb63ae7c996272a12dfa74dec7a678fa63e94d68b9d')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  env CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=target cargo build --release --locked
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  make \
+    VERSION=$pkgver \
+    DESTDIR="$pkgdir" \
+    BASHCOMPDIR=/usr/share/bash-completion/completions \
+    PREFIX="/usr" \
+    install
+}
